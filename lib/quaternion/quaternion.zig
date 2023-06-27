@@ -11,7 +11,7 @@ fn Quaternion(comptime T: type) type {
         k: T = 0.0, // third imaginary number
 
         /// Add two quaternions and return new one.
-        fn add(self: *const @This(), rhs: Quaternion(T)) Quaternion(T) {
+        pub fn add(self: *const @This(), rhs: Quaternion(T)) Quaternion(T) {
             var q = self.*;
             q.real += rhs.real;
             q.i += rhs.i;
@@ -21,7 +21,7 @@ fn Quaternion(comptime T: type) type {
         }
 
         /// Substract two quaternions and return new one.
-        fn sub(self: *const @This(), rhs: Quaternion(T)) Quaternion(T) {
+        pub fn sub(self: *const @This(), rhs: Quaternion(T)) Quaternion(T) {
             var q = self.*;
             q.real -= rhs.real;
             q.i -= rhs.i;
@@ -33,7 +33,7 @@ fn Quaternion(comptime T: type) type {
         /// Multiplication/product two quaternions.
         /// Return new quaternion as a result of multipication/product two
         /// quaternions.
-        fn mul(self: *const @This(), rhs: Quaternion(T)) Quaternion(T) {
+        pub fn mul(self: *const @This(), rhs: Quaternion(T)) Quaternion(T) {
             var q = Quaternion(T){};
 
             q.real = self.real * rhs.real;
@@ -60,7 +60,7 @@ fn Quaternion(comptime T: type) type {
         }
 
         /// Norm of quaternion. Typicaly mark as ||, for example |q|.
-        fn norm(self: *const @This()) T {
+        pub fn norm(self: *const @This()) T {
             var value: T = 0.0;
             value += self.real * self.real;
             value += self.i * self.i;
@@ -70,17 +70,17 @@ fn Quaternion(comptime T: type) type {
         }
 
         /// Conjugate. Typicaly mark as *, for example q*.
-        fn conj(self: *const @This()) Quaternion(T) {
+        pub fn conj(self: *const @This()) Quaternion(T) {
             return Quaternion(T){ .real = self.real, .i = (-self.i), .j = (-self.j), .k = (-self.k) };
         }
 
         ///
-        const QuaternionError = error{
+        pub const QuaternionError = error{
             IsNotUnit,
         };
 
         /// Inverse. Defined as q^-1 = (q*) / (|q|^2)
-        fn inv(self: *const @This()) Quaternion(T).QuaternionError!Quaternion(T) {
+        pub fn inv(self: *const @This()) Quaternion(T).QuaternionError!Quaternion(T) {
             if (self.isUnit() == false) {
                 return QuaternionError.IsNotUnit;
             }
@@ -94,7 +94,7 @@ fn Quaternion(comptime T: type) type {
         }
 
         /// Checks, if quaternion is unit (norm of quaternion is equal 1.0).
-        fn isUnit(self: *const Quaternion(T)) bool {
+        pub fn isUnit(self: *const Quaternion(T)) bool {
             var n = self.norm();
             return std.math.approxEqRel(T, n, @as(T, 1.0), @as(T, 0.000001));
         }

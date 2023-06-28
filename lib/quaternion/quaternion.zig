@@ -1,7 +1,7 @@
 const std = @import("std");
 
-const QuaternionF32 = Quaternion(f32);
-const QuaternionF64 = Quaternion(f64);
+pub const QuaternionF32 = Quaternion(f32);
+pub const QuaternionF64 = Quaternion(f64);
 
 fn Quaternion(comptime T: type) type {
     return struct {
